@@ -1,5 +1,4 @@
 const router = require('express').Router();
-
 router.route('/').get((req, res) => {
     res.json({ "operation_code": 1 })
 
@@ -25,7 +24,7 @@ router.route('/').post((req, res) => {
             const charCode = item.charCodeAt(0);
             if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
                 letters.push(item);
-                if (highestLetter === null || item > highestLetter) {
+                if (highestLetter === null || item.toLowerCase() > highestLetter.toLowerCase()) {
                     highestLetter = item;
                 }
             }
