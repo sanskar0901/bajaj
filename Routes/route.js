@@ -7,8 +7,6 @@ router.route('/').get((req, res) => {
 
 router.route('/').post((req, res) => {
     const data = req.body.data;
-    // data = ["M", "1", "334", "4", "B"]
-    //separate alphabet and numbers
     if (!Array.isArray(data)) {
         return res.status(400).json({ error: 'Invalid request format' });
     }
@@ -18,21 +16,19 @@ router.route('/').post((req, res) => {
     const email = 'sg5592@srmist.edu.in';
     const emailRegex = /^[a-zA-Z]{2}\d{4}@srmist\.edu\.in$/;
     const roll_number = 'RA2011003010224';
-    const numbers = [];
-    const alphabets = [];
-    let highestAlphabet = null;
+    const numbers = data.filter(item => !isNaN(item));
+    const letters = [];
+    let highestLetter = null;
+
     data.forEach(item => {
         if (typeof item === 'string' && item.length === 1) {
             const charCode = item.charCodeAt(0);
             if ((charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
-                // It's an uppercase or lowercase alphabet
-                alphabets.push(item);
-                if (highestAlphabet === null || item > highestAlphabet) {
-                    highestAlphabet = item;
+                letters.push(item);
+                if (highestLetter === null || item > highestLetter) {
+                    highestLetter = item;
                 }
             }
-        } else if (!isNaN(item)) {
-            numbers.push(item);
         }
     });
     var responseData = {
@@ -41,8 +37,8 @@ router.route('/').post((req, res) => {
         email: emailRegex.test(email) ? email : "not valid email",
         roll_number: roll_number,
         numbers: numbers.map(String),
-        alphabets,
-        highest_alphabet: highestAlphabet
+        letters,
+        highestLetter: highestLetter
     };
     res.json(responseData);
 })
